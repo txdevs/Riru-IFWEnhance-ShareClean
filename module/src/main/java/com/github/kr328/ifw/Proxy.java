@@ -9,6 +9,7 @@ import android.content.pm.ParceledListSlice;
 import android.content.pm.ResolveInfo;
 import android.os.Binder;
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.github.kr328.magic.aidl.ServerProxy;
 import com.github.kr328.magic.aidl.ServerProxyFactory;
@@ -70,6 +71,7 @@ public class Proxy extends IPackageManager.Stub {
 
         for (String pkg : getContext().getPackageManager().getPackagesForUid(Binder.getCallingUid())) {
             if (pkg.equals("com.jakting.shareclean") || pkg.equals("com.jakting.shareclean.debug")) {
+                Log.i("TigerBeanst",intent.getAction()+" "+intent.getType());
                 if (intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
                         && intent.getType().equals("text/tigerbeanst")) { //此时在检查模块状态
                     break;
