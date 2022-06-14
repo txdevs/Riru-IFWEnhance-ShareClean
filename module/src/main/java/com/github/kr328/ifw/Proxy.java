@@ -71,11 +71,16 @@ public class Proxy extends IPackageManager.Stub {
 
         for (String pkg : getContext().getPackageManager().getPackagesForUid(Binder.getCallingUid())) {
             if (pkg.equals("com.jakting.shareclean") || pkg.equals("com.jakting.shareclean.debug")) {
-                Log.i("TigerBeanst",intent.getAction()+" "+intent.getType());
                 if (intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
                         && intent.getType().equals("text/tigerbeanst")) { //此时在检查模块状态
-                    Log.i("TigerBeanst","模块检查到了");
-                    break;
+                    return new ParceledListSlice<>(
+                            Firewall.get().filterResult(
+                                    result.getList(),
+                                    Firewall.IntentFirewall.FilterType.ACTIVITY,
+                                    intent,
+                                    resolvedType
+                            )
+                    );
                 }
                 return result;
             }
