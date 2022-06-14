@@ -69,24 +69,19 @@ public class Proxy extends IPackageManager.Stub {
             return result;
         }
 
-        if (intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
-                && intent.getType().equals("text/tigerbeanst")) { //此时在检查模块状态
-            return new ParceledListSlice<>(
-                    Firewall.get().filterResult(
-                            result.getList(),
-                            Firewall.IntentFirewall.FilterType.ACTIVITY,
-                            intent,
-                            resolvedType
-                    )
-            );
-        }
-
         for (String pkg : getContext().getPackageManager().getPackagesForUid(Binder.getCallingUid())) {
             if (pkg.equals("com.jakting.shareclean") || pkg.equals("com.jakting.shareclean.debug")) {
+                if (intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
+                        && intent.getType().equals("text/tigerbeanst")) { //此时在检查模块状态
+                    Log.i("TigerBeanst","要过滤（文本）");
+                    break;
+                }
+                Log.i("TigerBeanst","不过滤");
                 return result;
             }
         }
 
+        Log.i("TigerBeanst","要过滤（通常）");
         return new ParceledListSlice<>(
                 Firewall.get().filterResult(
                         result.getList(),
