@@ -12,10 +12,10 @@ dependencies {
 }
 
 zygote {
-    val moduleId = "ifw-enhance"
-    val moduleName = "IFW Enhance"
-    val moduleDescription = "Allows Intent Firewall to filter results of queryIntent(Activities/Services) APIs."
-    val moduleAuthor = "Kr328"
+    val moduleId = "ifw-enhance-tiw"
+    val moduleName = "IFW Enhance TIW"
+    val moduleDescription = "Allows Intent Firewall to filter results of queryIntent(Activities/Services) APIs. Special edition for TigerInTheWall."
+    val moduleAuthor = "Kr328/TigerBeanst"
     val moduleEntrypoint = "com.github.kr328.ifw.Main"
     val versionName = android.defaultConfig.versionName
 
@@ -25,14 +25,14 @@ zygote {
         id = "riru-$moduleId".replace('-', '_')
         name = "Riru - $moduleName"
         archiveName = "riru-$moduleId-$versionName"
-        updateJson = "https://github.com/Kr328/Riru-IFWEnhance/releases/latest/download/riru-$moduleId.json"
+        updateJson = "https://github.com/TigerBeanst/Riru-IFWEnhance-TIW/releases/latest/download/riru-$moduleId.json"
     }
 
     zygisk {
         id = "zygisk-$moduleId".replace('-', '_')
         name = "Zygisk - $moduleName"
         archiveName = "zygisk-$moduleId-$versionName"
-        updateJson = "https://github.com/Kr328/Riru-IFWEnhance/releases/latest/download/zygisk-$moduleId.json"
+        updateJson = "https://github.com/TigerBeanst/Riru-IFWEnhance-TIW/releases/latest/download/zygisk-$moduleId.json"
     }
 
     all {

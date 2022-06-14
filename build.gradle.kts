@@ -27,7 +27,7 @@ subprojects {
                 minSdk = 26
                 targetSdk = 31
 
-                versionName = "v19"
+                versionName = "v19TIW"
                 versionCode = 19
 
                 if (!isApp) {

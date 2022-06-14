@@ -1,15 +1,20 @@
 package com.github.kr328.ifw;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.IPackageManager;
 import android.content.pm.ParceledListSlice;
 import android.content.pm.ResolveInfo;
+import android.os.Binder;
 import android.os.RemoteException;
 
 import com.github.kr328.magic.aidl.ServerProxy;
 import com.github.kr328.magic.aidl.ServerProxyFactory;
 import com.github.kr328.magic.aidl.TransactProxy;
+
+import java.lang.reflect.Method;
 
 public class Proxy extends IPackageManager.Stub {
     public static final ServerProxyFactory<IPackageManager, Proxy> FACTORY;
@@ -26,6 +31,22 @@ public class Proxy extends IPackageManager.Stub {
 
     public Proxy(IPackageManager original) {
         this.original = original;
+    }
+
+    @SuppressLint("PrivateApi")
+    private Context getContext() {
+        Context context = null;
+        try {
+            Class<?> ActivityThread = Class.forName("android.app.ActivityThread");
+            Method method = ActivityThread.getMethod("currentActivityThread");
+            Object currentActivityThread = method.invoke(ActivityThread);//获取currentActivityThread 对象
+
+            Method method2 = currentActivityThread.getClass().getMethod("getApplication");
+            context = (Context) method2.invoke(currentActivityThread);//获取 Context对象
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return context;
     }
 
     @Override
@@ -45,6 +66,16 @@ public class Proxy extends IPackageManager.Stub {
 
         if (Firewall.get() == null) {
             return result;
+        }
+
+        for (String pkg : getContext().getPackageManager().getPackagesForUid(Binder.getCallingUid())) {
+            if (pkg.equals("com.jakting.shareclean") || pkg.equals("com.jakting.shareclean.debug")) {
+                if (intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
+                        && intent.getType().equals("text/tigerbeanst")) { //此时在检查模块状态
+                    break;
+                }
+                return result;
+            }
         }
 
         return new ParceledListSlice<>(
