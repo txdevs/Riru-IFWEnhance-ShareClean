@@ -74,6 +74,7 @@ public class Proxy extends IPackageManager.Stub {
                 Log.i("TigerBeanst",intent.getAction()+" "+intent.getType());
                 if (intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
                         && intent.getType().equals("text/tigerbeanst")) { //此时在检查模块状态
+                    Log.i("TigerBeanst","模块检查到了");
                     break;
                 }
                 return result;
