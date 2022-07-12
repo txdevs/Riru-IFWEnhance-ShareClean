@@ -104,6 +104,8 @@ public final class Firewall {
                             intent.setComponent(ComponentName.createRelative(info.activityInfo.packageName, info.activityInfo.name));
                             intent.setPackage(info.activityInfo.packageName);
 
+                            if(intent.getComponent().getClassName().equals("com.jakting.shareclean.utils.ModuleAvailable")) return false;
+
                             return impl.checkStartActivity(
                                     intent,
                                     callingUid,
