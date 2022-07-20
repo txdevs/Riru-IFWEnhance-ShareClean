@@ -9,13 +9,13 @@ import android.content.pm.ParceledListSlice;
 import android.content.pm.ResolveInfo;
 import android.os.Binder;
 import android.os.RemoteException;
-import android.util.Log;
 
 import com.github.kr328.magic.aidl.ServerProxy;
 import com.github.kr328.magic.aidl.ServerProxyFactory;
 import com.github.kr328.magic.aidl.TransactProxy;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public class Proxy extends IPackageManager.Stub {
     public static final ServerProxyFactory<IPackageManager, Proxy> FACTORY;
@@ -71,10 +71,13 @@ public class Proxy extends IPackageManager.Stub {
 
         for (String pkg : getContext().getPackageManager().getPackagesForUid(Binder.getCallingUid())) {
             if (pkg.equals("com.jakting.shareclean") || pkg.equals("com.jakting.shareclean.debug")) {
-                if (intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
-                        && intent.getType().equals("image/*")
-                ) break;
-                return result;
+                if (!(intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
+                        && intent.getType().equals("text/tigerinthewall")
+                )){
+                    return result;
+                }else{
+                    return new ParceledListSlice<>(new ArrayList<>());
+                }
             }
         }
 
