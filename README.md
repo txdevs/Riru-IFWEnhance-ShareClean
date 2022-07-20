@@ -1,6 +1,8 @@
-# Riru - IFWEnhance
+# Riru - IFWEnhance TIW
 
 A module of [Riru](https://github.com/RikkaApps/Riru)/[Zygisk](https://github.com/topjohnwu/zygisk-module-sample). Allows Intent Firewall to filter results of queryIntent(Activities/Services) APIs.
+
+This is a special edition, ONLY for [TigerInTheWall](https://github.com/TigerBeanst/TigerInTheWall).
 
 ## Requirements
 
@@ -34,5 +36,5 @@ Allows Intent Firewall to filter results of follow APIs.
     ./gradlew module:assembleRelease
     ```
     
-4. Pick `<loader>-ifw-enhance-<version>.zip` from `module/build/outputs/<loader>/release`
+4. Pick `<loader>-ifw-enhance-tiw-<version>.zip` from `module/build/outputs/<loader>/release`
 
