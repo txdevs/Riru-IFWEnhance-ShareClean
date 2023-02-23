@@ -18,19 +18,12 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class Proxy extends IPackageManager.Stub {
-    public static final ServerProxyFactory<IPackageManager, Proxy> FACTORY;
-
-    static {
-        try {
-            FACTORY = ServerProxy.createFactory(IPackageManager.class, Proxy.class, false);
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public static final ServerProxyFactory<IPackageManager, Proxy> FACTORY =
+            ServerProxy.mustCreateFactory(IPackageManager.class, Proxy.class, false);
 
     private final IPackageManager original;
 
-    public Proxy(IPackageManager original) {
+    public Proxy(final IPackageManager original) {
         this.original = original;
     }
 
@@ -53,10 +46,10 @@ public class Proxy extends IPackageManager.Stub {
     @Override
     @TransactProxy
     public ParceledListSlice<ResolveInfo> queryIntentActivities(
-            Intent intent,
-            String resolvedType,
-            int flags,
-            int userId
+            final Intent intent,
+            final String resolvedType,
+            final int flags,
+            final int userId
     ) throws RemoteException {
         final ParceledListSlice<ResolveInfo> result = original.queryIntentActivities(
                 intent,
@@ -94,10 +87,10 @@ public class Proxy extends IPackageManager.Stub {
     @Override
     @TransactProxy
     public ParceledListSlice<ResolveInfo> queryIntentActivities(
-            Intent intent,
-            String resolvedType,
-            long flags,
-            int userId
+            final Intent intent,
+            final String resolvedType,
+            final long flags,
+            final int userId
     ) throws RemoteException {
         final ParceledListSlice<ResolveInfo> result = original.queryIntentActivities(
                 intent,
@@ -135,13 +128,13 @@ public class Proxy extends IPackageManager.Stub {
     @Override
     @TransactProxy
     public ParceledListSlice<ResolveInfo> queryIntentActivityOptions(
-            ComponentName caller,
-            Intent[] specifics,
-            String[] specificTypes,
-            Intent intent,
-            String resolvedType,
-            int flags,
-            int userId
+            final ComponentName caller,
+            final Intent[] specifics,
+            final String[] specificTypes,
+            final Intent intent,
+            final String resolvedType,
+            final int flags,
+            final int userId
     ) throws RemoteException {
         final ParceledListSlice<ResolveInfo> result = original.queryIntentActivityOptions(
                 caller,
@@ -170,13 +163,13 @@ public class Proxy extends IPackageManager.Stub {
     @Override
     @TransactProxy
     public ParceledListSlice<ResolveInfo> queryIntentActivityOptions(
-            ComponentName caller,
-            Intent[] specifics,
-            String[] specificTypes,
-            Intent intent,
-            String resolvedType,
-            long flags,
-            int userId
+            final ComponentName caller,
+            final Intent[] specifics,
+            final String[] specificTypes,
+            final Intent intent,
+            final String resolvedType,
+            final long flags,
+            final int userId
     ) throws RemoteException {
         final ParceledListSlice<ResolveInfo> result = original.queryIntentActivityOptions(
                 caller,
@@ -206,10 +199,10 @@ public class Proxy extends IPackageManager.Stub {
     @Override
     @TransactProxy
     public ParceledListSlice<ResolveInfo> queryIntentServices(
-            Intent intent,
-            String resolvedType,
-            int flags,
-            int userId
+            final Intent intent,
+            final String resolvedType,
+            final int flags,
+            final int userId
     ) throws RemoteException {
         final ParceledListSlice<ResolveInfo> result = original.queryIntentServices(
                 intent,
@@ -235,10 +228,10 @@ public class Proxy extends IPackageManager.Stub {
     @Override
     @TransactProxy
     public ParceledListSlice<ResolveInfo> queryIntentServices(
-            Intent intent,
-            String resolvedType,
-            long flags,
-            int userId
+            final Intent intent,
+            final String resolvedType,
+            final long flags,
+            final int userId
     ) throws RemoteException {
         final ParceledListSlice<ResolveInfo> result = original.queryIntentServices(
                 intent,
