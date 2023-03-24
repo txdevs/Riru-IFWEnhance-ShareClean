@@ -6,11 +6,14 @@ import android.content.pm.IPackageManager;
 import android.content.pm.ParceledListSlice;
 import android.content.pm.ResolveInfo;
 import android.os.Binder;
+import android.os.Process;
 import android.os.RemoteException;
 
 import com.github.kr328.magic.aidl.ServerProxy;
 import com.github.kr328.magic.aidl.ServerProxyFactory;
 import com.github.kr328.magic.aidl.TransactProxy;
+
+import java.util.ArrayList;
 
 public class Proxy extends IPackageManager.Stub {
     public static final ServerProxyFactory<IPackageManager, Proxy> FACTORY =
@@ -41,23 +44,21 @@ public class Proxy extends IPackageManager.Stub {
             return result;
         }
 
-        String[] callingPackages = original.getPackagesForUid(Binder.getCallingUid());
-        if (callingPackages == null)
+        int callingUid = Binder.getCallingUid();
+        if (callingUid == Process.ROOT_UID)
             return result;
-
-        for (String pkg : callingPackages) {
-            if (pkg.equals("com.jakting.shareclean") || pkg.equals("com.jakting.shareclean.debug")) {
-                if (!(intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
-                        && intent.getType().equals("text/tigerinthewall")
-                )) {
-                    return result;
-                } else {
-                    result.getList().removeIf(resolveInfo ->
-                            resolveInfo.activityInfo.packageName.equals("com.jakting.shareclean") ||
-                                    resolveInfo.activityInfo.packageName.equals("com.jakting.shareclean.debug"));
-                    return result;
+        if (callingUid != Process.SYSTEM_UID) {
+            String[] callingPackages = original.getPackagesForUid(callingUid);
+            if (callingPackages != null)
+                for (String pkg : callingPackages) {
+                    if (pkg.equals("com.jakting.shareclean") || pkg.equals("com.jakting.shareclean.debug")) {
+                        if (intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
+                                && intent.getType().equals("text/tigerinthewall")) {
+                            return new ParceledListSlice<>(new ArrayList<>());
+                        }
+                        return result;
+                    }
                 }
-            }
         }
 
         return new ParceledListSlice<>(
@@ -89,23 +90,21 @@ public class Proxy extends IPackageManager.Stub {
             return result;
         }
 
-        String[] callingPackages = original.getPackagesForUid(Binder.getCallingUid());
-        if (callingPackages == null)
+        int callingUid = Binder.getCallingUid();
+        if (callingUid == Process.ROOT_UID)
             return result;
-
-        for (String pkg : original.getPackagesForUid(Binder.getCallingUid())) {
-            if (pkg.equals("com.jakting.shareclean") || pkg.equals("com.jakting.shareclean.debug")) {
-                if (!(intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
-                        && intent.getType().equals("text/tigerinthewall")
-                )) {
-                    return result;
-                } else {
-                    result.getList().removeIf(resolveInfo ->
-                            resolveInfo.activityInfo.packageName.equals("com.jakting.shareclean") ||
-                                    resolveInfo.activityInfo.packageName.equals("com.jakting.shareclean.debug"));
-                    return result;
+        if (callingUid != Process.SYSTEM_UID) {
+            String[] callingPackages = original.getPackagesForUid(callingUid);
+            if (callingPackages != null)
+                for (String pkg : callingPackages) {
+                    if (pkg.equals("com.jakting.shareclean") || pkg.equals("com.jakting.shareclean.debug")) {
+                        if (intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
+                                && intent.getType().equals("text/tigerinthewall")) {
+                            return new ParceledListSlice<>(new ArrayList<>());
+                        }
+                        return result;
+                    }
                 }
-            }
         }
 
         return new ParceledListSlice<>(
