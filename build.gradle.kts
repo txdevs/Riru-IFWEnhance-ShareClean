@@ -25,8 +25,8 @@ subprojects {
                 minSdk = 26
                 targetSdk = 33
 
-                versionName = "v21TIW"
-                versionCode = 21000
+                versionName = "v21.1TIW"
+                versionCode = 21100
 
                 if (!isApp) {
                     consumerProguardFiles("consumer-rules.pro")

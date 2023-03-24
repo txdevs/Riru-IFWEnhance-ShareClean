@@ -1,8 +1,6 @@
 package com.github.kr328.ifw;
 
-import android.annotation.SuppressLint;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.IPackageManager;
 import android.content.pm.ParceledListSlice;
@@ -14,9 +12,6 @@ import com.github.kr328.magic.aidl.ServerProxy;
 import com.github.kr328.magic.aidl.ServerProxyFactory;
 import com.github.kr328.magic.aidl.TransactProxy;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-
 public class Proxy extends IPackageManager.Stub {
     public static final ServerProxyFactory<IPackageManager, Proxy> FACTORY =
             ServerProxy.mustCreateFactory(IPackageManager.class, Proxy.class, false);
@@ -27,22 +22,6 @@ public class Proxy extends IPackageManager.Stub {
         this.original = original;
     }
 
-    @SuppressLint("PrivateApi")
-    private Context getContext() {
-        Context context = null;
-        try {
-            Class<?> ActivityThread = Class.forName("android.app.ActivityThread");
-            Method method = ActivityThread.getMethod("currentActivityThread");
-            Object currentActivityThread = method.invoke(ActivityThread);//获取currentActivityThread 对象
-
-            Method method2 = currentActivityThread.getClass().getMethod("getApplication");
-            context = (Context) method2.invoke(currentActivityThread);//获取 Context对象
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return context;
-    }
-
     @Override
     @TransactProxy
     public ParceledListSlice<ResolveInfo> queryIntentActivities(
@@ -62,14 +41,21 @@ public class Proxy extends IPackageManager.Stub {
             return result;
         }
 
-        for (String pkg : getContext().getPackageManager().getPackagesForUid(Binder.getCallingUid())) {
+        String[] callingPackages = original.getPackagesForUid(Binder.getCallingUid());
+        if (callingPackages == null)
+            return result;
+
+        for (String pkg : callingPackages) {
             if (pkg.equals("com.jakting.shareclean") || pkg.equals("com.jakting.shareclean.debug")) {
                 if (!(intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
                         && intent.getType().equals("text/tigerinthewall")
-                )){
+                )) {
                     return result;
-                }else{
-                    return new ParceledListSlice<>(new ArrayList<>());
+                } else {
+                    result.getList().removeIf(resolveInfo ->
+                            resolveInfo.activityInfo.packageName.equals("com.jakting.shareclean") ||
+                                    resolveInfo.activityInfo.packageName.equals("com.jakting.shareclean.debug"));
+                    return result;
                 }
             }
         }
@@ -103,14 +89,21 @@ public class Proxy extends IPackageManager.Stub {
             return result;
         }
 
-        for (String pkg : getContext().getPackageManager().getPackagesForUid(Binder.getCallingUid())) {
+        String[] callingPackages = original.getPackagesForUid(Binder.getCallingUid());
+        if (callingPackages == null)
+            return result;
+
+        for (String pkg : original.getPackagesForUid(Binder.getCallingUid())) {
             if (pkg.equals("com.jakting.shareclean") || pkg.equals("com.jakting.shareclean.debug")) {
                 if (!(intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
                         && intent.getType().equals("text/tigerinthewall")
-                )){
+                )) {
                     return result;
-                }else{
-                    return new ParceledListSlice<>(new ArrayList<>());
+                } else {
+                    result.getList().removeIf(resolveInfo ->
+                            resolveInfo.activityInfo.packageName.equals("com.jakting.shareclean") ||
+                                    resolveInfo.activityInfo.packageName.equals("com.jakting.shareclean.debug"));
+                    return result;
                 }
             }
         }
@@ -252,5 +245,11 @@ public class Proxy extends IPackageManager.Stub {
                         resolvedType
                 )
         );
+    }
+
+    @Override
+    @TransactProxy
+    public String[] getPackagesForUid(int uid) throws RemoteException {
+        return original.getPackagesForUid(uid);
     }
 }
