@@ -56,6 +56,9 @@ public interface IPackageManager extends IInterface {
             int userId
     ) throws RemoteException;
 
+    String[] getPackagesForUid(int uid)
+            throws RemoteException;
+
     abstract class Stub extends Binder implements IPackageManager {
         public static IPackageManager asInterface(IBinder binder) {
             throw new IllegalArgumentException("Stub!");

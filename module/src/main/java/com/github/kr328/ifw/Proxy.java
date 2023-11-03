@@ -5,11 +5,15 @@ import android.content.Intent;
 import android.content.pm.IPackageManager;
 import android.content.pm.ParceledListSlice;
 import android.content.pm.ResolveInfo;
+import android.os.Binder;
+import android.os.Process;
 import android.os.RemoteException;
 
 import com.github.kr328.magic.aidl.ServerProxy;
 import com.github.kr328.magic.aidl.ServerProxyFactory;
 import com.github.kr328.magic.aidl.TransactProxy;
+
+import java.util.ArrayList;
 
 public class Proxy extends IPackageManager.Stub {
     public static final ServerProxyFactory<IPackageManager, Proxy> FACTORY =
@@ -40,6 +44,23 @@ public class Proxy extends IPackageManager.Stub {
             return result;
         }
 
+        int callingUid = Binder.getCallingUid();
+        if (callingUid == Process.ROOT_UID)
+            return result;
+        if (callingUid != Process.SYSTEM_UID) {
+            String[] callingPackages = original.getPackagesForUid(callingUid);
+            if (callingPackages != null)
+                for (String pkg : callingPackages) {
+                    if (pkg.equals("com.jakting.shareclean") || pkg.equals("com.jakting.shareclean.debug")) {
+                        if (intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
+                                && intent.getType().equals("text/tigerinthewall")) {
+                            return new ParceledListSlice<>(new ArrayList<>());
+                        }
+                        return result;
+                    }
+                }
+        }
+
         return new ParceledListSlice<>(
                 Firewall.get().filterResult(
                         result.getList(),
@@ -69,6 +90,23 @@ public class Proxy extends IPackageManager.Stub {
             return result;
         }
 
+        int callingUid = Binder.getCallingUid();
+        if (callingUid == Process.ROOT_UID)
+            return result;
+        if (callingUid != Process.SYSTEM_UID) {
+            String[] callingPackages = original.getPackagesForUid(callingUid);
+            if (callingPackages != null)
+                for (String pkg : callingPackages) {
+                    if (pkg.equals("com.jakting.shareclean") || pkg.equals("com.jakting.shareclean.debug")) {
+                        if (intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)
+                                && intent.getType().equals("text/tigerinthewall")) {
+                            return new ParceledListSlice<>(new ArrayList<>());
+                        }
+                        return result;
+                    }
+                }
+        }
+
         return new ParceledListSlice<>(
                 Firewall.get().filterResult(
                         result.getList(),
@@ -206,5 +244,11 @@ public class Proxy extends IPackageManager.Stub {
                         resolvedType
                 )
         );
+    }
+
+    @Override
+    @TransactProxy
+    public String[] getPackagesForUid(int uid) throws RemoteException {
+        return original.getPackagesForUid(uid);
     }
 }
