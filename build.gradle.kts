@@ -2,8 +2,8 @@ import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
 
 plugins {
-    val agp = "7.4.1"
-    val zygote = "3.0"
+    val agp = "8.1.2"
+    val zygote = "3.1"
 
     id("com.android.library") version agp apply false
     id("com.android.application") version agp apply false
@@ -23,10 +23,10 @@ subprojects {
                 }
 
                 minSdk = 26
-                targetSdk = 33
+                targetSdk = 34
 
-                versionName = "v21.1TIW"
-                versionCode = 21100
+                versionName = "v22TIW"
+                versionCode = 22000
 
                 if (!isApp) {
                     consumerProguardFiles("consumer-rules.pro")
@@ -48,5 +48,5 @@ subprojects {
 }
 
 task("clean", type = Delete::class) {
-    delete(rootProject.buildDir)
+    delete(layout.buildDirectory)
 }
