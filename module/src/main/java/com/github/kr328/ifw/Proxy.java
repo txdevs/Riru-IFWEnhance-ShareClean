@@ -56,6 +56,8 @@ public class Proxy extends IPackageManager.Stub {
                         if (action != null && action.equals(Intent.ACTION_PROCESS_TEXT)
                                 && type != null && type.equals("text/tigerinthewall")) {
                             return new ParceledListSlice<>(new ArrayList<>());
+                        } else {
+                            return result;
                         }
                     }
             }
@@ -102,6 +104,8 @@ public class Proxy extends IPackageManager.Stub {
                         if (action != null && action.equals(Intent.ACTION_PROCESS_TEXT)
                                 && type != null && type.equals("text/tigerinthewall")) {
                             return new ParceledListSlice<>(new ArrayList<>());
+                        } else {
+                            return result;
                         }
                     }
             }
