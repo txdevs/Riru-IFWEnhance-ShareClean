@@ -1,8 +1,8 @@
 # Riru - IFWEnhance TIW
 
-A module of [Riru](https://github.com/RikkaApps/Riru)/[Zygisk](https://github.com/topjohnwu/zygisk-module-sample). Allows Intent Firewall to filter results of queryIntent(Activities/Services) APIs.
+A [Riru](https://github.com/RikkaApps/Riru)/[Zygisk](https://github.com/topjohnwu/zygisk-module-sample) module. Allows Intent Firewall to filter results of queryIntent(Activities/Services) APIs.
 
-This is a special edition, ONLY for [TigerInTheWall](https://github.com/TigerBeanst/TigerInTheWall).
+This is a special version, ONLY for [ShareClean](https://github.com/txdevs/ShareClean).
 
 ## Requirements
 
